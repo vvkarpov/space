@@ -17,10 +17,21 @@ public class Ship {
     private String planet;//Arrival planet
     private ShipType shipType;//Ship type
     private Date prodDate;//Release date
-    private Boolean isUsed;//Used/New
-    private Double speed;//Ship speed (
+    private Boolean isUsed;//Used or New
+    private Double speed;//Ship speed
     private Integer crewSize;//Crew size
     private Double rating;//Ship rating
+
+    public Ship(String name, String planet, ShipType shipType, Date prodDate, Boolean isUsed, Double speed, Integer crewSize, Double rating) {
+        this.name = name;
+        this.planet = planet;
+        this.shipType = shipType;
+        this.prodDate = prodDate;
+        this.isUsed = isUsed;
+        this.speed = speed;
+        this.crewSize = crewSize;
+        this.rating = rating;
+    }
 
     public String getName() {
         return name;

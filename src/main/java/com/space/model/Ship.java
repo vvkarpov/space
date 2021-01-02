@@ -1,16 +1,14 @@
-package com.space.controller;
+package com.space.model;
 
 import com.space.model.ShipType;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "ship")
 public class Ship {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;//ID ship
 
     private String name; //Ship name
@@ -21,17 +19,6 @@ public class Ship {
     private Double speed;//Ship speed
     private Integer crewSize;//Crew size
     private Double rating;//Ship rating
-
-    public Ship(String name, String planet, ShipType shipType, Date prodDate, Boolean isUsed, Double speed, Integer crewSize, Double rating) {
-        this.name = name;
-        this.planet = planet;
-        this.shipType = shipType;
-        this.prodDate = prodDate;
-        this.isUsed = isUsed;
-        this.speed = speed;
-        this.crewSize = crewSize;
-        this.rating = rating;
-    }
 
     public String getName() {
         return name;

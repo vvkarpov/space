@@ -1,19 +1,22 @@
 package com.space.model;
 
-import com.space.model.ShipType;
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "ship")
+
 public class Ship {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;//ID ship
 
     private String name; //Ship name
     private String planet;//Arrival planet
+    @Enumerated(EnumType.STRING)
     private ShipType shipType;//Ship type
+    @Temporal(TemporalType.DATE)
     private Date prodDate;//Release date
     private Boolean isUsed;//Used or New
     private Double speed;//Ship speed

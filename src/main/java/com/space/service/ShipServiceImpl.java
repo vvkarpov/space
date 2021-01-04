@@ -5,17 +5,26 @@ import com.space.repository.ShipRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import javax.transaction.Transactional;
 
 @Service
+@Transactional
 public class ShipServiceImpl implements ShipService{
+
+    private ShipRepository shipRepository;
+
+    public ShipServiceImpl() {
+    }
+
     @Autowired
-    ShipRepository shipRepository;
+    public ShipServiceImpl(ShipRepository shipRepository) {
+        super();
+        this.shipRepository = shipRepository;
+    }
 
     @Override
     public Ship getShip(long id) {
-        return shipRepository.getOne(id);
+        return shipRepository.findById(id).orElse(null);
     }
 
 }

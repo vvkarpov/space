@@ -39,8 +39,9 @@ public class ShipController {
     ){
         List<Ship> ships = shipService.getShips(name, planet, shipType, after, before, isUsed, minSpeed,
                 maxSpeed, minCrewSize, maxCrewSize, minRating, maxRating);
+        List<Ship> sortShips = shipService.sortShips(ships, order);
 
-        return ships;
+        return shipService.getPage(sortShips, pageNumber, pageSize);
     }
 
     @GetMapping(value = "ships/{id}")//Get ship from bd

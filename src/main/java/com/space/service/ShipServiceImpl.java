@@ -64,11 +64,26 @@ public class ShipServiceImpl implements ShipService{
     public List<Ship> sortShips(List<Ship> shipsList, ShipOrder order){
         if (order != null){
             switch (order){
-                case ID:
-
+                case ID: Collections.sort(shipsList, compareById);
+                break;
+                case SPEED: Collections.sort(shipsList, compareBySpeed);
+                break;
+                case DATE: Collections.sort(shipsList, compareByDate);
+                break;
+                case RATING: Collections.sort(shipsList, compareByRating);
+                break;
             }
-
         }
+        return shipsList;
+    }
+
+    public List<Ship> getPage(List<Ship> ships, Integer pageNumber, Integer pageSize){
+        Integer page = pageNumber == null ? 0 : pageNumber;
+        Integer size = pageSize == null ? 3 : pageSize;
+        int from = page * size;
+        int to = from + size;
+        if (to > ships.size()) to = ships.size();
+        return ships.subList(from, to);
     }
 
     @Override
@@ -76,5 +91,25 @@ public class ShipServiceImpl implements ShipService{
         return shipRepository.findById(id).orElse(null);
     }
 
+    Comparator<Ship> compareById = new Comparator<Ship>() {
+        public int compare(Ship ship1, Ship ship2) {
+            return (int) (ship1.getId() - ship2.getId());
+        }
+    };
+    Comparator<Ship> compareBySpeed = new Comparator<Ship>() {
+        public int compare(Ship ship1, Ship ship2) {
+            return ship1.getSpeed().compareTo(ship2.getSpeed());
+        }
+    };
+    Comparator<Ship> compareByDate = new Comparator<Ship>() {
+        public int compare(Ship ship1, Ship ship2) {
+            return ship1.getProdDate().compareTo(ship2.getProdDate());
+        }
+    };
+    Comparator<Ship> compareByRating = new Comparator<Ship>() {
+        public int compare(Ship ship1, Ship ship2) {
+            return ship1.getRating().compareTo(ship2.getRating());
+        }
+    };
 
 }

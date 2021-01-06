@@ -15,6 +15,8 @@ public interface ShipService {
 
     List<Ship> sortShips(List<Ship> ships, ShipOrder order);
 
+    List<Ship> getPage(List<Ship> ships, Integer pageNumber, Integer pageSize);
+
     //int getShipsCount();
 
     //void createShip(Ship ship);

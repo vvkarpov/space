@@ -23,5 +23,5 @@ public interface ShipService {
 
     Ship updateShip(long id, Ship newShip);
 
-    //void deleteShip(long id);
+    void deleteShip(long id);
 }

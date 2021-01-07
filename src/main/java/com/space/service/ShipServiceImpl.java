@@ -118,6 +118,10 @@ public class ShipServiceImpl implements ShipService{
         return updateShip;
     }
 
+    public void deleteShip(long id){
+        shipRepository.deleteById(id);
+    }
+
     Comparator<Ship> compareById = new Comparator<Ship>() {
         public int compare(Ship ship1, Ship ship2) {
             return (int) (ship1.getId() - ship2.getId());

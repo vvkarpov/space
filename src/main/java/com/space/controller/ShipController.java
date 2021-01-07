@@ -126,10 +126,25 @@ public class ShipController {
         Long id = convertStringToLong(uriID);
         if (id == null || id <= 0)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Ship checkShip = shipService.getShip(id);
+        if (checkShip == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         Ship updateShip = shipService.updateShip(id, ship);
-        return updateShip != null
-                ? new ResponseEntity<>(updateShip, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(updateShip, HttpStatus.OK);
+    }
+
+    @DeleteMapping("ships/{id}")//Delete ship
+    public ResponseEntity<Ship> deleteShip(@PathVariable(name = "id") String uriID){
+        Long id = convertStringToLong(uriID);
+        if (id == null || id <= 0)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Ship ship = shipService.getShip(id);
+        if (ship == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        
+        shipService.deleteShip(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private Long convertStringToLong(String uriID){//Converting ID to Long

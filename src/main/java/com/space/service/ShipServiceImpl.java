@@ -86,6 +86,10 @@ public class ShipServiceImpl implements ShipService{
         return ships.subList(from, to);
     }
 
+    public Ship createShip(Ship ship){
+        return shipRepository.save(ship);
+    }
+
     @Override
     public Ship getShip(long id) {
         return shipRepository.findById(id).orElse(null);

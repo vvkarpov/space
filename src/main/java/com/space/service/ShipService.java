@@ -17,9 +17,7 @@ public interface ShipService {
 
     List<Ship> getPage(List<Ship> ships, Integer pageNumber, Integer pageSize);
 
-    //int getShipsCount();
-
-    //void createShip(Ship ship);
+    Ship createShip(Ship ship);
 
     Ship getShip(long id);
 

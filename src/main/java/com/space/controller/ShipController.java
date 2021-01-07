@@ -108,12 +108,27 @@ public class ShipController {
 
     @GetMapping(value = "ships/{id}")//Get ship from bd
     public ResponseEntity<Ship> getShip(@PathVariable(name = "id") String uriID) {
+
         Long id = convertStringToLong(uriID);
         if (id == null || id <= 0)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Ship ship = shipService.getShip(id);
         return ship != null
                 ? new ResponseEntity<>(ship, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping(value = "ships/{id}")//Update ship
+    @ResponseBody
+    public ResponseEntity<Ship> updateShip(@PathVariable(name = "id") String uriID,
+                                           @RequestBody Ship ship){
+
+        Long id = convertStringToLong(uriID);
+        if (id == null || id <= 0)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Ship updateShip = shipService.updateShip(id, ship);
+        return updateShip != null
+                ? new ResponseEntity<>(updateShip, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -132,8 +147,10 @@ public class ShipController {
 
     private Double ratingShip(Double speed, Boolean isUsed, Date prodDate){
         Double k = isUsed ? 1 : 0.5;
-        int year = prodDate.getYear();
-        double rating = ((80 * speed *  k) / 3019 - year + 1);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(prodDate);
+        int year = calendar.get(Calendar.YEAR);
+        double rating = 80 * speed *  k / (3019 - year + 1);
         return Math.round(rating * 100) / 100D;
     }
 

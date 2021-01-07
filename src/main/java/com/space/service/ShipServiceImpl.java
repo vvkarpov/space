@@ -1,5 +1,6 @@
 package com.space.service;
 
+import com.space.controller.ShipController;
 import com.space.controller.ShipOrder;
 import com.space.model.Ship;
 import com.space.model.ShipType;
@@ -93,6 +94,28 @@ public class ShipServiceImpl implements ShipService{
     @Override
     public Ship getShip(long id) {
         return shipRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Ship updateShip(long id, Ship newShip){
+        Ship updateShip = shipRepository.findById(id).orElse(null);
+        if (newShip.getName() != null) updateShip.setName(newShip.getName());
+        if (newShip.getPlanet() != null) updateShip.setPlanet(newShip.getPlanet());
+        if (newShip.getShipType() != null) updateShip.setShipType(newShip.getShipType());
+        if (newShip.getProdDate() != null) updateShip.setProdDate(newShip.getProdDate());
+        if (newShip.getUsed() != null) updateShip.setUsed(newShip.getUsed());
+        if (newShip.getSpeed() != null) updateShip.setSpeed(newShip.getSpeed());
+        if (newShip.getCrewSize() != null) updateShip.setCrewSize(newShip.getCrewSize());
+
+        Double k = updateShip.getUsed() ? 1 : 0.5;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(updateShip.getProdDate());
+        int year = calendar.get(Calendar.YEAR);
+        double rating = 80 * updateShip.getSpeed() *  k / (3019 - year + 1);
+        updateShip.setRating(Math.round(rating * 100) / 100D);
+
+        shipRepository.save(updateShip);
+        return updateShip;
     }
 
     Comparator<Ship> compareById = new Comparator<Ship>() {

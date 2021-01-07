@@ -80,30 +80,27 @@ public class ShipController {
             ship.getCrewSize() == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else if (ship.getName().length() > 50 || ship.getPlanet().length() > 50){
+        if (ship.getName().length() > 50 || ship.getPlanet().length() > 50){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else if (ship.getName().isEmpty() || ship.getPlanet().isEmpty()){
+        if (ship.getName().isEmpty() || ship.getPlanet().isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else if (Math.round(ship.getSpeed() * 100) / 100D < 0.01 ||
+        if (Math.round(ship.getSpeed() * 100) / 100D < 0.01 ||
                 Math.round(ship.getSpeed() * 100) / 100D > 0.99){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else if (ship.getCrewSize() < 1 || ship.getCrewSize() > 9999){
+        if (ship.getCrewSize() < 1 || ship.getCrewSize() > 9999){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else if (ship.getProdDate().getTime() < 0 || ship.getProdDate().before(startProd) ||
+        if (ship.getProdDate().getTime() < 0 || ship.getProdDate().before(startProd) ||
                 ship.getProdDate().after(endProd)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else{
-            if (ship.getUsed() == null)
-                ship.setUsed(false);
-            ship.setRating(ratingShip(ship.getSpeed(), ship.getUsed(), ship.getProdDate()));
-            return new ResponseEntity<>(shipService.createShip(ship), HttpStatus.OK);
-        }
+        if (ship.getUsed() == null) ship.setUsed(false);
 
+        ship.setRating(ratingShip(ship.getSpeed(), ship.getUsed(), ship.getProdDate()));
+        return new ResponseEntity<>(shipService.createShip(ship), HttpStatus.OK);
     }
 
     @GetMapping(value = "ships/{id}")//Get ship from bd
@@ -122,6 +119,32 @@ public class ShipController {
     @ResponseBody
     public ResponseEntity<Ship> updateShip(@PathVariable(name = "id") String uriID,
                                            @RequestBody Ship ship){
+
+        if (ship.getName() != null){
+            if (ship.getName().length() > 50){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            if (ship.getName().isEmpty()){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if (ship.getCrewSize() != null){
+            if (ship.getCrewSize() < 1 || ship.getCrewSize() > 9999){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if (ship.getProdDate() != null){
+            Calendar startCalendar = new GregorianCalendar(2800, Calendar.JANUARY, 1);
+            Date startProd = startCalendar.getTime();
+            Calendar endCalendar = new GregorianCalendar(3019, Calendar.DECEMBER, 31);
+            Date endProd = endCalendar.getTime();
+            if (ship.getProdDate().getTime() < 0 || ship.getProdDate().before(startProd) ||
+                    ship.getProdDate().after(endProd)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
 
         Long id = convertStringToLong(uriID);
         if (id == null || id <= 0)
@@ -142,7 +165,7 @@ public class ShipController {
         Ship ship = shipService.getShip(id);
         if (ship == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        
+
         shipService.deleteShip(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -161,7 +184,7 @@ public class ShipController {
     }
 
     private Double ratingShip(Double speed, Boolean isUsed, Date prodDate){
-        Double k = isUsed ? 1 : 0.5;
+        Double k = isUsed ? 0.5 : 1;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(prodDate);
         int year = calendar.get(Calendar.YEAR);

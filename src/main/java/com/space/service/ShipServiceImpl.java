@@ -107,7 +107,7 @@ public class ShipServiceImpl implements ShipService{
         if (newShip.getSpeed() != null) updateShip.setSpeed(newShip.getSpeed());
         if (newShip.getCrewSize() != null) updateShip.setCrewSize(newShip.getCrewSize());
 
-        Double k = updateShip.getUsed() ? 1 : 0.5;
+        Double k = updateShip.getUsed() ? 0.5 : 1;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(updateShip.getProdDate());
         int year = calendar.get(Calendar.YEAR);

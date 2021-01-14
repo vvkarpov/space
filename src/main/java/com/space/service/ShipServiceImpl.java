@@ -107,11 +107,10 @@ public class ShipServiceImpl implements ShipService{
         if (newShip.getSpeed() != null) updateShip.setSpeed(newShip.getSpeed());
         if (newShip.getCrewSize() != null) updateShip.setCrewSize(newShip.getCrewSize());
 
-        Double k = updateShip.getUsed() ? 0.5 : 1;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(updateShip.getProdDate());
-        int year = calendar.get(Calendar.YEAR);
-        double rating = 80 * updateShip.getSpeed() *  k / (3019 - year + 1);
+        Double speed = updateShip.getSpeed();
+        Boolean isUsed = updateShip.getUsed();
+        Date prodDate = updateShip.getProdDate();
+        double rating = ratingShip(speed, isUsed, prodDate);
         updateShip.setRating(Math.round(rating * 100) / 100D);
 
         shipRepository.save(updateShip);
@@ -142,5 +141,14 @@ public class ShipServiceImpl implements ShipService{
             return ship1.getRating().compareTo(ship2.getRating());
         }
     };
+
+    public Double ratingShip(Double speed, Boolean isUsed, Date prodDate){
+        Double k = isUsed ? 0.5 : 1;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(prodDate);
+        int year = calendar.get(Calendar.YEAR);
+        double rating = 80 * speed *  k / (3019 - year + 1);
+        return Math.round(rating * 100) / 100D;
+    }
 
 }

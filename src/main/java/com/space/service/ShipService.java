@@ -4,6 +4,7 @@ import com.space.controller.ShipOrder;
 import com.space.model.Ship;
 import com.space.model.ShipType;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ShipService {
@@ -24,4 +25,6 @@ public interface ShipService {
     Ship updateShip(long id, Ship newShip);
 
     void deleteShip(long id);
+
+    Double ratingShip(Double speed, Boolean isUsed, Date prodDate);
 }

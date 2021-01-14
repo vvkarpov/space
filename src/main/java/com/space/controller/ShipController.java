@@ -99,7 +99,10 @@ public class ShipController {
         }
         if (ship.getUsed() == null) ship.setUsed(false);
 
-        ship.setRating(ratingShip(ship.getSpeed(), ship.getUsed(), ship.getProdDate()));
+        Double speed = ship.getSpeed();
+        Boolean isUsed = ship.getUsed();
+        Date prodDate = ship.getProdDate();
+        ship.setRating(shipService.ratingShip(speed, isUsed, prodDate));
         return new ResponseEntity<>(shipService.createShip(ship), HttpStatus.OK);
     }
 
@@ -181,15 +184,6 @@ public class ShipController {
             catch (Exception exp){
                 return null;
             }
-    }
-
-    private Double ratingShip(Double speed, Boolean isUsed, Date prodDate){
-        Double k = isUsed ? 0.5 : 1;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(prodDate);
-        int year = calendar.get(Calendar.YEAR);
-        double rating = 80 * speed *  k / (3019 - year + 1);
-        return Math.round(rating * 100) / 100D;
     }
 
 }
